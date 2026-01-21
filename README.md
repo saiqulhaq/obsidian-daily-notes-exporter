@@ -8,16 +8,15 @@ A collection of Ruby scripts to export and process Obsidian vault notes.
 
 ## Overview
 
-This project provides two main utilities for working with Obsidian markdown files:
+This project provides utilities for exporting and processing Obsidian vault notes:
 
-1. **Daily Notes Exporter** - Exports daily notes and their linked pages from an Obsidian vault
-2. **XML Concatenator** - Converts markdown files into a single XML document
+**Daily Notes Exporter** - Exports daily notes and their linked pages from an Obsidian vault, automatically creating both markdown exports and an XML file for easy processing.
 
 ## Scripts
 
 ### export.rb
 
-Exports daily notes from an Obsidian vault for the last N days, including all linked pages (wiki-style links).
+Exports daily notes from an Obsidian vault for the last N days, including all linked pages (wiki-style links), and automatically creates an XML file.
 
 #### Features
 
@@ -32,6 +31,7 @@ Exports daily notes from an Obsidian vault for the last N days, including all li
 - Uses `tree` CLI for faster indexing if available, falls back to directory traversal
 - Generates a detailed manifest of all exported files
 - Unicode-aware link normalization
+- **Automatically creates `export.xml` with all exported markdown files**
 
 #### Configuration
 
@@ -93,29 +93,6 @@ The script will:
 📦 Complete! Export available at: /tmp/export-20260121_143022
 📄 XML file: /tmp/export-20260121_143022/export.xml
 ```
-
-### concat.rb
-
-Converts all markdown files in the current directory into a single XML file.
-
-**Note**: This script is now automatically called by `export.rb` after exporting. You typically don't need to run it separately unless you want to convert markdown files in a different directory.
-
-#### Features
-
-- Recursively finds all `.md` files in the current directory
-- Outputs a structured XML file with proper encoding
-- Escapes HTML/XML special characters
-- Uses CDATA sections for content to preserve formatting
-- Skips specific files (`MANIFEST.md`, `export.xml`)
-
-#### Usage
-
-```bash
-cd /path/to/markdown/files
-ruby concat.rb
-```
-
-This will create `export.xml` in the current directory.
 
 #### XML Structure
 
@@ -194,25 +171,19 @@ bundle exec rspec --format documentation
 │   ├── spec_helper.rb               # RSpec configuration
 │   ├── obsidian_daily_exporter_spec.rb
 │   └── markdown_concatenator_spec.rb
-├── export.rb                         # CLI script for exporting
-├── concat.rb                         # CLI script for concatenation
+├── export.rb                         # CLI script for exporting & XML generation
 ├── Gemfile                          # Dependencies
 └── README.md
 ```
 
 ## Use Cases
 
-### export.rb
 - Create backups of your recent daily notes with linked content
 - Share a subset of your vault with collaborators
 - Archive notes for a specific time period
 - Export notes for external processing or publishing
 - **Get a ready-to-use XML export in one command**
-
-### concat.rb
-- Manually convert markdown files in any directory to XML
-- Re-process previously exported notes
-- Create XML exports from custom markdown collections
+- Import exported data into other systems using the XML format
 
 ## License
 
