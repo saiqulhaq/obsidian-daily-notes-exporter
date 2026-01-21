@@ -1,0 +1,20 @@
+# RSpec
+spec/examples.txt
+
+# Bundler
+.bundle/
+vendor/bundle/
+
+# Test exports
+/tmp/
+
+# Gem files
+*.gem
+Gemfile.lock
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

@@ -2,6 +2,10 @@
 
 A collection of Ruby scripts to export and process Obsidian vault notes.
 
+## Project Status
+
+✅ **47 passing tests** | 📦 Refactored for testability | 🔧 Actively maintained
+
 ## Overview
 
 This project provides two main utilities for working with Obsidian markdown files:
@@ -56,6 +60,7 @@ The script will:
 3. Export each note and recursively export linked pages
 4. Create an export directory at `/tmp/export-YYYYMMDD_HHMMSS/`
 5. Generate a `MANIFEST.md` file listing all exported files
+6. **Automatically create `export.xml` with all exported markdown files**
 
 #### Example Output
 
@@ -82,11 +87,18 @@ The script will:
 ✅ Export complete!
 📦 Exported to: /tmp/export-20260121_143022
 📊 Total files copied: 45
+
+🔄 Creating XML export...
+✅ Wrote XML to /tmp/export-20260121_143022/export.xml
+📦 Complete! Export available at: /tmp/export-20260121_143022
+📄 XML file: /tmp/export-20260121_143022/export.xml
 ```
 
 ### concat.rb
 
 Converts all markdown files in the current directory into a single XML file.
+
+**Note**: This script is now automatically called by `export.rb` after exporting. You typically don't need to run it separately unless you want to convert markdown files in a different directory.
 
 #### Features
 
@@ -123,33 +135,84 @@ This will create `export.xml` in the current directory.
 
 ## Requirements
 
-- Ruby (tested with recent versions)
+- Ruby 2.7 or higher (tested with recent versions)
+- Bundler for dependency management
 - For `export.rb`:
-  - `pry` gem (for debugging): `gem install pry`
   - Optional: `tree` CLI tool for faster indexing (install via `brew install tree` on macOS)
 
 ## Installation
 
-1. Clone this repository
-2. Install required gems:
+1. Clone this repository:
    ```bash
-   gem install pry
+   git clone https://github.com/saiqulhaq/obsidian-daily-notes-exporter.git
+   cd obsidian-daily-notes-exporter
    ```
-3. Set up your environment variable for the Obsidian vault (for `export.rb`)
+
+2. Install dependencies:
+   ```bash
+   bundle install
+   ```
+
+3. Set up your environment variable for the Obsidian vault (for `export.rb`):
+   ```bash
+   export OBSIDIAN_VAULT="/path/to/your/obsidian/vault"
+   ```
+
+## Development
+
+The codebase has been refactored for better testability and maintainability:
+
+- **lib/obsidian_daily_exporter.rb** - Main exporter class with dependency injection
+- **lib/markdown_concatenator.rb** - XML concatenation functionality
+- **spec/** - Comprehensive RSpec test suite
+
+### Running Tests
+
+Run all tests:
+```bash
+bundle exec rspec
+```
+
+Run specific test file:
+```bash
+bundle exec rspec spec/obsidian_daily_exporter_spec.rb
+```
+
+Run with detailed output:
+```bash
+bundle exec rspec --format documentation
+```
+
+### Project Structure
+
+```
+.
+├── lib/
+│   ├── obsidian_daily_exporter.rb  # Exporter class
+│   └── markdown_concatenator.rb     # Concatenator class
+├── spec/
+│   ├── spec_helper.rb               # RSpec configuration
+│   ├── obsidian_daily_exporter_spec.rb
+│   └── markdown_concatenator_spec.rb
+├── export.rb                         # CLI script for exporting
+├── concat.rb                         # CLI script for concatenation
+├── Gemfile                          # Dependencies
+└── README.md
+```
 
 ## Use Cases
 
 ### export.rb
-- Create backups of your recent daily notes
+- Create backups of your recent daily notes with linked content
 - Share a subset of your vault with collaborators
 - Archive notes for a specific time period
 - Export notes for external processing or publishing
+- **Get a ready-to-use XML export in one command**
 
 ### concat.rb
-- Combine exported notes into a single XML file
-- Prepare notes for import into other systems
-- Create a searchable archive format
-- Generate data for analysis or processing
+- Manually convert markdown files in any directory to XML
+- Re-process previously exported notes
+- Create XML exports from custom markdown collections
 
 ## License
 
@@ -158,3 +221,18 @@ See [LICENSE](LICENSE) file for details.
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for development guidelines, testing instructions, and code structure information.
+
+## Development Quick Start
+
+```bash
+# Install dependencies
+bundle install
+
+# Run tests
+bundle exec rspec
+
+# Run with verbose output
+bundle exec rspec --format documentation
+```
